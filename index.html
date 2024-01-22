@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Current Location Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    #map {
+      height: 400px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Current Location Map</h1>
+  <h3>Latitude: <span id="latitude"></span></h3>
+  <h3>Longitude: <span id="longitude"></span></h3>
+  <div id="map"></div>
+
+  <script>
+    // Initialize Leaflet map
+    var map = L.map('map').setView([0, 0], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    function getLocation() {
+      navigator.geolocation.getCurrentPosition(
+        function (position) {
+          var latitude = position.coords.latitude;
+          var longitude = position.coords.longitude;
+        
+          document.getElementById('latitude').textContent = latitude.toFixed(6);
+          document.getElementById('longitude').textContent = longitude.toFixed(6);
+
+          map.setView([latitude, longitude], 13);
+          L.marker([latitude, longitude]).addTo(map)
+            .bindPopup('Your Location').openPopup();
+        },
+        function (error) {
+          console.error('Error getting location:', error.message);
+        }
+      );
+    }
+    getLocation();
+  </script>
+</body>
+</html>
