@@ -15,7 +15,7 @@
 <body>
 <h2>Group 2</h2>
 <h2>Dharini Vaghela -200533763 <br> Nancy Dungrani- 200530960</h2>
-  <h1>Current Location Map</h1>
+  <h1>Current Location of Sat </h1>
   <h3>Latitude: <span id="latitude"></span></h3>
   <h3>Longitude: <span id="longitude"></span></h3>
   <div id="map"></div>
@@ -26,24 +26,24 @@
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
     }).addTo(map);
-    function getLocation() {
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          var latitude = position.coords.latitude;
-          var longitude = position.coords.longitude;
+
+    const iss_api = "https://api.wheretheiss.at/v1/satellites/25544"
+
+    async function getLocation() {
+
+      const response = await fetch(iss_api)
+      const data = await response.json()
+
+          var latitude = data.latitude;
+          var longitude = data.longitude;
         
           document.getElementById('latitude').textContent = latitude.toFixed(6);
           document.getElementById('longitude').textContent = longitude.toFixed(6);
 
           map.setView([latitude, longitude], 13);
           L.marker([latitude, longitude]).addTo(map)
-            .bindPopup('Your Location').openPopup();
-        },
-        function (error) {
-          console.error('Error getting location:', error.message);
-        }
-      );
-    }
+            .bindPopup('Sat Location').openPopup();
+        } 
     getLocation();
   </script>
 </body>
